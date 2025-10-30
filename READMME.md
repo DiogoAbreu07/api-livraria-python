@@ -1,82 +1,82 @@
-# 📚 API de Livraria Pessoal (Projeto de Portfólio)
+# API de Livraria Pessoal (com Autenticação JWT)
 
-Uma API RESTful completa para gerenciar uma coleção de livros, construída com Python, FastAPI e SQLAlchemy como parte do meu aprendizado em desenvolvimento back-end.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-green?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0%2B-red?style=for-the-badge&logo=sqlalchemy)](https://www.sqlalchemy.org/)
 
-**Status do Projeto:** Concluído ✔️
+API RESTful desenvolvida como parte do meu aprendizado em desenvolvimento Back-end com Python. O projeto implementa um sistema de gerenciamento de livros com autenticação de usuários baseada em Token JWT.
 
----
+## Status do Projeto
+Projeto Concluído (Versão 2.0)
 
-## 🚀 Sobre o Projeto
+## 🚀 Features
 
-Este projeto é o primeiro de uma série para meu portfólio de Desenvolvedor Back-end. O objetivo foi construir uma API 100% funcional que implementa todas as operações de um **CRUD (Create, Read, Update, Delete)**.
-
-A API permite criar, listar, buscar por ID, atualizar e deletar livros de um banco de dados SQLite.
+* [x] **Autenticação de Usuários**:
+    * [x] Cadastro (`POST /usuarios`) com validação e criptografia de senha (PBKDF2-SHA256).
+    * [x] Login (`POST /login`) com geração de Token JWT.
+* [x] **CRUD de Livros Protegido**:
+    * [x] `POST`, `PUT`, `DELETE` de livros são rotas protegidas que exigem um Token JWT válido.
+    * [x] `GET` (leitura) de livros são rotas públicas.
+* [x] **Documentação Automática**: Geração de documentação interativa (Swagger UI) com "cadeados" 🔒 para rotas protegidas.
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **Python 3.10+**
-* **FastAPI:** Para a construção da API (rotas, validação, documentação).
-* **Pydantic:** Para validação e "contratos" de dados (schemas).
-* **SQLAlchemy:** Para o ORM (Object-Relational Mapping) e comunicação com o banco.
-* **SQLite:** Banco de dados leve e local.
-* **Uvicorn:** Servidor ASGI para rodar a aplicação.
+* **Linguagem:** Python
+* **Framework:** FastAPI
+* **Servidor:** Uvicorn
+* **ORM:** SQLAlchemy
+* **Banco de Dados:** SQLite
+* **Validação de Dados:** Pydantic
+* **Segurança:** `passlib` (para hash de senhas) e `python-jose` (para Tokens JWT)
+* **Dependências Extras:** `python-multipart`, `bcrypt` (ou `pbkdf2_sha256`)
 
-## ✨ Features (Funcionalidades)
+## 📦 Como Executar o Projeto
 
-* [x] **Create:** `POST /livros` - Adiciona um novo livro.
-* [x] **Read (All):** `GET /livros` - Lista todos os livros.
-* [x] **Read (One):** `GET /livros/{id}` - Busca um livro específico por ID.
-* [x] **Update:** `PUT /livros/{id}` - Atualiza um livro existente.
-* [x] **Delete:** `DELETE /livros/{id}` - Deleta um livro.
-* [x] **Documentação Automática:** Acesso em `/docs` (Swagger UI).
+Siga os passos abaixo para executar o projeto localmente:
 
----
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/DiogoAbreu07/api-livraria-python.git](https://github.com/DiogoAbreu07/api-livraria-python.git)
+    cd api-livraria-python
+    ```
 
-## 🏁 Como Executar (Localmente)
+2.  **Crie e ative o ambiente virtual:**
+    ```bash
+    # Windows
+    python -m venv venv
+    .\venv\Scripts\activate
+    ```
 
-Siga os passos abaixo para rodar o projeto na sua máquina.
+3.  **Instale as dependências:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-**1. Clone o repositório:**
-```bash
-git clone https://github.com/DiogoAbreu07/api-livraria-python.git
-cd api-livraria-python
-```
+4.  **Execute o servidor:**
+    ```bash
+    uvicorn main:app --reload
+    ```
 
-**2. Crie e ative o ambiente virtual (venv):**
-```bash
-# Windows
-python -m venv venv
-.\venv\Scripts\activate
+5.  **Acesse a API:**
+    * **Documentação (Swagger):** `http://127.0.0.1:8000/docs`
 
-# Mac/Linux
-python3 -m venv venv
-source venv/bin/activate
-```
+## 📖 Endpoints da API
 
-**3. Instale as dependências:**
-```bash
-pip install -r requirements.txt
-```
+A documentação completa pode ser acessada em `/docs`.
 
-**4. Rode o servidor:**
-```bash
-uvicorn main:app --reload
-```
-
-**5. Acesse a API:**
-* **Servidor rodando em:** `http://127.0.0.1:8000`
-* **Documentação Interativa (Swagger):** `http://127.0.0.1:8000/docs`
-
----
-
-## 📋 Endpoints da API
-
-Abaixo está um resumo dos endpoints disponíveis:
+### Autenticação
 
 | Método | Rota | Descrição |
 | :--- | :--- | :--- |
-| `POST` | `/livros` | Cria um novo livro. |
-| `GET` | `/livros` | Lista todos os livros. |
-| `GET` | `/livros/{livro_id}` | Busca um livro por ID. |
-| `PUT` | `/livros/{livro_id}` | Atualiza um livro por ID. |
-| `DELETE` | `/livros/{livro_id}`| Deleta um livro por ID. |
+| `POST` | `/usuarios` | Cadastra um novo usuário. |
+| `POST` | `/login` | Faz login e retorna um Token JWT. |
+
+### Livros
+
+| Método | Rota | Descrição | Protegido? |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/livros` | Adiciona um novo livro. | **Sim** 🔒 |
+| `GET` | `/livros` | Lista todos os livros. | Não |
+| `GET` | `/livros/{livro_id}` | Obtém um livro pelo seu ID. | Não |
+| `PUT` | `/livros/{livro_id}` | Atualiza um livro existente. | **Sim** 🔒 |
+| `DELETE` | `/livros/{livro_id}` | Deleta um livro pelo seu ID. | **Sim** 🔒 |

@@ -1,30 +1,34 @@
-# --- Meu Diário de Bordo (models.py) ---
+# --- Meu Diário de Bordo (models.py - Versão 2.0 CORRIGIDA) ---
 
-# Vou importar as classes 'Column', 'Integer', 'String'
-# para definir os tipos das minhas colunas na tabela.
-from sqlalchemy import Column, Integer, String
+# A importação deve incluir 'Boolean' agora, para o Usuario.
+from sqlalchemy import Column, Integer, String, Boolean
 
-# Também preciso importar a 'Base' que eu criei no database.py.
-# É ela que vai "ligar" esta classe ao SQLAlchemy.
+# Importação da Base
 from database import Base
 
-# Esta é a minha classe "Modelo" (Model).
-# Ela representa a tabela 'livros' no meu banco de dados.
+# --- MODELO DE LIVRO (Definição ÚNICA) ---
+# Aqui está sua classe Livro, definida APENAS UMA VEZ.
 class Livro(Base):
-    # '__tablename__' é obrigatório. É o nome real da tabela no banco.
     __tablename__ = "livros"
 
-    # Agora eu defino as colunas da minha tabela:
-    
-    # 'id': Vai ser um número Inteiro, é a chave primária (primary_key=True)
-    # e vai se auto-incrementar (index=True, embora o autoincrement seja implícito com pk).
+    id = Column(Integer, primary_key=True, index=True)
+    titulo = Column(String, index=True)
+    autor = Column(String, index=True)
+    ano_publicacao = Column(Integer)
+
+# --- MODELO DE USUÁRIO (A nova classe) ---
+# E aqui está a nova classe Usuario, logo abaixo.
+class Usuario(Base):
+    __tablename__ = "usuarios"
+
+    # 'id': A chave primária.
     id = Column(Integer, primary_key=True, index=True)
 
-    # 'titulo': Vai ser uma String (texto).
-    titulo = Column(String, index=True)
+    # 'email': Será o "login". Tem que ser único (unique=True).
+    email = Column(String, unique=True, index=True, nullable=False)
 
-    # 'autor': Também uma String.
-    autor = Column(String, index=True)
+    # 'hashed_password': A senha CRIPTOGRAFADA. Nunca salvar senha em texto!
+    hashed_password = Column(String, nullable=False)
 
-    # 'ano_publicacao': Um Inteiro para guardar o ano.
-    ano_publicacao = Column(Integer)
+    # 'is_active': Útil para "desativar" um usuário sem apagá-lo.
+    is_active = Column(Boolean, default=True)

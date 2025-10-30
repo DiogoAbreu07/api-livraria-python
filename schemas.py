@@ -1,34 +1,56 @@
-# --- Meu Diário de Bordo (schemas.py) ---
+# --- Meu Diário de Bordo (schemas.py - Versão 2.2 CORRIGIDA) ---
 
-# 'BaseModel' é a classe principal do Pydantic.
-# Meus "contratos" (schemas) vão herdar dela.
-from pydantic import BaseModel
+# Vamos importar 'Field' do Pydantic
+from pydantic import BaseModel, Field
 
-# Este é o "contrato" base.
-# Ele tem os campos que são comuns tanto na criação quanto na leitura.
+# E vamos importar 'Optional' do 'typing' (AQUI ESTAVA O ERRO)
+from typing import Optional
+
+# --- SCHEMAS DE LIVRO (Existentes) ---
+
 class LivroBase(BaseModel):
     titulo: str
     autor: str
     ano_publicacao: int
 
-# Este é o "contrato" de CRIAÇÃO (Create).
-# Quando alguém for enviar um livro novo para minha API (POST),
-# o JSON deve ter exatamente estes campos.
-# Por enquanto, ele é idêntico ao Base.
 class LivroCreate(LivroBase):
-    pass  # 'pass' significa que ele não tem campos extras.
+    pass
 
-# Este é o "contrato" de LEITURA (Read).
-# Quando minha API DEVOLVER um livro, ela vai usar este formato.
-# Note que ele tem o 'id', que o banco de dados gera sozinho.
 class Livro(LivroBase):
     id: int
 
-    # Esta configuração 'from_attributes = True' (antes era 'orm_mode')
-    # é uma mágica do Pydantic. Ela diz: "Você pode ler os dados
-    # diretamente de um objeto SQLAlchemy (meu 'models.Livro')
-    # e não só de um dicionário."
-    # Isso faz a "tradução" do 'models.Livro' para 'schemas.Livro'
-    # ser automática.
     class Config:
         from_attributes = True
+
+
+# --- SCHEMAS DE USUÁRIO (Com Validação) ---
+
+class UsuarioBase(BaseModel):
+    email: str
+
+# 'UsuarioCreate': O que eu preciso receber para CADASTRAR um usuário.
+class UsuarioCreate(UsuarioBase):
+    # Regras de validação para a senha
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=64
+    )
+
+# 'Usuario': O que eu vou DEVOLVER quando buscar um usuário.
+class Usuario(UsuarioBase):
+    id: int
+    is_active: bool
+
+    class Config:
+        from_attributes = True
+
+# --- SCHEMAS DE TOKEN (Novos) ---
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+# 'TokenData': Os dados que eu vou guardar "dentro" do Token.
+class TokenData(BaseModel):
+    email: Optional[str] = None
