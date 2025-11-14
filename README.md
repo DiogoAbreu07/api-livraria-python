@@ -267,7 +267,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 </table>
 
 [![GitHub](https://img.shields.io/badge/GitHub-DiogoAbreu07-181717?style=for-the-badge&logo=github)](https://github.com/DiogoAbreu07)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Conectar-0077B5?style=for-the-badge&logo=linkedin)](www.linkedin.com/in/diogoabreuu)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-diogoabreuu-0077B5?style=for-the-badge&logo=linkedin)](www.linkedin.com/in/diogoabreuu)
 
 ## 💙 Agradecimentos
 
